@@ -1,0 +1,28 @@
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    border-top: 20px;
+}
+
+.input{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: small;
+    background-color: none;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    border-top: 30px;
+}
+
+#usern_password{
+    border-top: 30px;
+    
+}
+#login_button{
+    padding-top: 10px;
+}
+
+input {
+    width: 100%;
+    padding: 1px;
+}

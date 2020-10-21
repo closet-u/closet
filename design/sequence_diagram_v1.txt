@@ -1,0 +1,42 @@
+actor user
+participant FE
+participant BE
+database DB
+
+==login==
+
+user->FE : Opens ClosetU
+FE -> BE : Request to submit credentials
+BE -> DB : Request to validate credentials
+DB -> BE : (Boolean) Pass/Fail Credentials
+BE -> FE : Display Success/Fail
+FE -> user : Login Fail/Succeed==login==
+
+
+==register==
+
+user->FE : Opens ClosetU
+FE -> BE : Request to submit/validate information
+BE -> DB : Request to find existing user/store data
+DB -> BE : (Boolean) pass/fail criteria
+BE -> FE : Display Success/Fail
+FE -> user : Register Fail/Succeed
+
+==Closet==
+
+user->FE : Wants to upload photo
+FE -> BE : Request to store photo
+BE -> DB : Store photo into database
+DB -> BE : (Boolean) success/fail
+BE -> FE : Display Success/Fail
+
+==Assembling==
+
+FE -> BE : Request every photo from closet
+BE -> DB : Retrieve photos/their meta data
+DB -> BE : 
+BE -> FE : Render photos in assembing closet
+FE -> BE : Request to save outfit
+BE -> DB : Save outfit (just photo)
+DB -> BE : Success/Fail storing outfit
+BE -> FE : Display success fail
