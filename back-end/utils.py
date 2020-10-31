@@ -8,11 +8,13 @@ from backend import *
 def save_login(info):
     #list1 = info.keys()
     valid = False
-    if "username" in info and "password" in order:
+    if "username" in info and "password" in info:
+        print("found")
         valid = True
     else:
-        return False
-
+        print("not found")
+        valid = False
+    return valid
 def validate(info):
     valid = False
     for i in dir(loginCol):
