@@ -3,9 +3,8 @@ import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button'
 import InputLabel from '@material-ui/core/InputLabel';
 
+import ClosetApiService from '../../services/ClosetApiService';
 import './login.css';
-
-
 
 interface LoginFormState {
   username: string;
@@ -13,6 +12,7 @@ interface LoginFormState {
 }
 
 class LoginForm extends React.Component<{}, LoginFormState> {
+  closetApiService = new ClosetApiService();
 
   constructor(props: any) {
     super(props);
@@ -20,13 +20,24 @@ class LoginForm extends React.Component<{}, LoginFormState> {
       username: '',
       password: ''
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleRegister = this.handleRegister.bind(this);
   }
 
-  handleSubmit(event: any) {
-    alert('A name was submitted: ' + this.state.username + ' ' + this.state.password);
-    event.preventDefault();
+  response_login = ''
 
+  handleLogin(event: any): void {
+    event.preventDefault();
+    alert('A name was submitted: ' + this.state.username + ' ' + this.state.password);
+    let response = this.closetApiService.get_user_info(this.state.username, this.state.password);
+    console.log(response);
+  }
+
+  handleRegister(event: any): void {
+    event.preventDefault();
+    alert('A name was submitted: ' + this.state.username + ' ' + this.state.password);
+    let response = this.closetApiService.send_register_info(this.state.username, this.state.password);
+    console.log(response);
   }
 
   render() {
@@ -45,8 +56,11 @@ class LoginForm extends React.Component<{}, LoginFormState> {
           }} type="password" id="password_log" aria-describedby="my-helper-text" />
           <div id="login_button">
           <Button variant = 'outlined' onClick={(event: any) =>{
-            this.handleSubmit(event)
-        }} id="registration_sub">Click me</Button>
+            this.handleLogin(event)
+        }} id="registration_sub">Login</Button>
+          <Button variant = 'outlined' onClick={(event: any) =>{
+              this.handleRegister(event)
+          }} id="registration_sub">Register</Button>
         </div>
         </form>
       </div>
