@@ -42,26 +42,26 @@ class LoginForm extends React.Component<{}, LoginFormState> {
 
   render() {
     return (
-      <div id = "usern_password">
-        
+      <div id="usern_password">
+
         <form noValidate autoComplete="off">
           <InputLabel htmlFor="username">Username</InputLabel>
           <Input onChange={(event: any) => {
-            this.setState({username: event.target.value});
+            this.setState({ username: event.target.value });
           }} id="username" aria-describedby="my-helper-text" />
 
           <InputLabel htmlFor="password">Password</InputLabel>
           <Input onChange={(event: any) => {
-            this.setState({password: event.target.value});
+            this.setState({ password: event.target.value });
           }} type="password" id="password_log" aria-describedby="my-helper-text" />
           <div id="login_button">
-          <Button variant = 'outlined' onClick={(event: any) =>{
-            this.handleLogin(event)
-        }} id="registration_sub">Login</Button>
-          <Button variant = 'outlined' onClick={(event: any) =>{
+            <Button variant='outlined' onClick={(event: any) => {
+              this.handleLogin(event)
+            }} id="registration_sub">Login</Button>
+            <Button variant='outlined' onClick={(event: any) => {
               this.handleRegister(event)
-          }} id="registration_sub">Register</Button>
-        </div>
+            }} id="registration_sub">Register</Button>
+          </div>
         </form>
       </div>
     );

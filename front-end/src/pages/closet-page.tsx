@@ -8,27 +8,27 @@ import './closet-page.css'
 
 class ClosetPage extends React.Component {
 
-        render(){
-            
+    render() {
+
         return (
-            
+
             <div className={'root'}>
-            <input
-                accept="image/*"
-                className={"input"}
-                id="contained-button-file"
-                multiple
-                type="file"
-            />
-            <label htmlFor="contained-button-file">
-                <Button variant="contained" color="default" component="span">
-                Upload
+                <input
+                    accept="image/*"
+                    className={"input"}
+                    id="contained-button-file"
+                    multiple
+                    type="file"
+                />
+                <label htmlFor="contained-button-file">
+                    <Button variant="contained" color="default" component="span">
+                        Upload
                 </Button>
-            </label>
-           {/*  <input accept="image/*" className={"input"} id="icon-button-file" type="file" /> */}
-            
+                </label>
+                {/*  <input accept="image/*" className={"input"} id="icon-button-file" type="file" /> */}
+
             </div>
-            
+
         );
     }
 }

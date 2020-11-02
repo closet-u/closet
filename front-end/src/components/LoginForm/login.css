@@ -5,7 +5,7 @@
     border-top: 20px;
 }
 
-.input{
+.input {
     font-family: 'Times New Roman', Times, serif;
     font-size: small;
     background-color: none;
@@ -14,11 +14,12 @@
     border-top: 30px;
 }
 
-#usern_password{
+#usern_password {
     border-top: 30px;
-    
+
 }
-#login_button{
+
+#login_button {
     padding-top: 10px;
 }
 
