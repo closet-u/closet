@@ -3,17 +3,18 @@ import flask
 from flask import Flask, request
 from utils import *
 from backend import *
-
-#from flask_cors import CORS, cross_origin
+from flask_cors import CORS, cross_origin
 # Flask setup
 app = Flask(__name__)
-# cors = CORS(app)
-# app.config['CORS_HEADERS']= 'Content-Type'
+cors = CORS(app)
+app.config['CORS_HEADERS']= 'Content-Type'
+# @app.route("/")
+# @cross_origin()
 
 # registration path
 
-
-@app.route("/register")
+@app.route("/register/<body>", methods=['GET', 'POST'] )
+@cross_origin()
 def registration(body):
     body = request.body
     info = json.loads(body)
@@ -31,7 +32,7 @@ def registration(body):
 # login path
 
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login(body):
     body = request.body
     info = json.loads(body)
@@ -48,15 +49,15 @@ def login(body):
         return json.dumps({'Fail': False}), 400, {'ContentType': 'application/json'}
 
 
-def main():
-    post = {'username': 'claudia1', 'password': '54321'}
-    registration(post)
-    print("main")
-    # login(post)
+# def main():
+#     post = {'username': 'claudia1', 'password': '54321'}
+#     registration(post)
+#     print("main")
+#     # login(post)
+#
+#
+# main()
 
 
-main()
-
-
-# if __name__ == '__main__':
-#     app.run(debug = True)
+if __name__ == '__main__':
+    app.run(debug = True)

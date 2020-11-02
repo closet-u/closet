@@ -1,6 +1,6 @@
 
 export class ClosetApiService {
-  private api_url = "http://localhost:3000";
+  private api_url = "http://127.0.0.1:5000";
   private flask_login = `${this.api_url}/login`;
   private flask_register = `${this.api_url}/register`
 
@@ -21,6 +21,10 @@ export class ClosetApiService {
   }
 
   send_register_info(username: string, password: string) {
+    console.log(JSON.stringify({
+      "username": username,
+      "password": password
+    }))
     const response = fetch(this.flask_register, {
       method: 'POST',
       body: JSON.stringify({
