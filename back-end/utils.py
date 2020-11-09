@@ -21,7 +21,21 @@ def save_login(info):
 
 def validate(info):
     valid = False
-    for i in dir(loginCol):
-        if info == i:
-            valid = True
+    found_flags = 0
+    print(info)
+    print(type(info))
+    username = info.get('username')
+    password = info.get('password')
+    print(username)
+    print(password)
+    if loginCol.find_one({'username': username}) == None:
+        valid = False
+    else:
+        found_flags += 1
+    if loginCol.find_one({'password': password}) == None:
+        valid = False
+    else:
+        found_flags += 1
+    if(found_flags == 2):
+        valid = True
     return valid
