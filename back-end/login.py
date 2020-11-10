@@ -45,7 +45,6 @@ def login():
     result = validate(body)
     # if login information is valid- return True
     if result == True:
-        post = body
         print("Login Successful!")
         return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
