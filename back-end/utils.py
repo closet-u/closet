@@ -22,12 +22,9 @@ def save_login(info):
 def validate(info):
     valid = False
     found_flags = 0
-    print(info)
     print(type(info))
     username = info.get('username')
     password = info.get('password')
-    print(username)
-    print(password)
     if loginCol.find_one({'username': username}) == None:
         valid = False
     else:

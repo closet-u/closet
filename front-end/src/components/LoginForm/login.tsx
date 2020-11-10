@@ -43,7 +43,6 @@ class LoginForm extends React.Component<{}, LoginFormState> {
   render() {
     return (
       <div id="usern_password">
-
         <form noValidate autoComplete="off">
           <InputLabel htmlFor="username">Username</InputLabel>
           <Input onChange={(event: any) => {
