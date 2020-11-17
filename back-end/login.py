@@ -7,23 +7,27 @@ from flask_cors import CORS, cross_origin
 # Flask setup
 app = Flask(__name__)
 cors = CORS(app)
-app.config['CORS_HEADERS']= 'Content-Type'
+app.config['CORS_HEADERS'] = 'Content-Type'
 # @app.route("/")
 # @cross_origin()
 
 # registration path
 
-@app.route("/register/<body>", methods=['GET', 'POST'] )
+
+@app.route("/register", methods=['GET', 'POST'])
 @cross_origin()
-def registration(body):
-    body = request.body
-    info = json.loads(body)
-    print(info.keys())
-    result = save_login(body)
+def registration():
+    payload_data = request.get_data()
+    loaded_data = json.loads(payload_data.decode('utf-8'))
+    test = json.dumps(loaded_data)
+    body = loaded_data
+    #info = json.loads(body)
+    # print(info.keys())
+    result = save_login(test)
 
     # if registration information is valid- instert in # DB
     if result == True:
-        loginCol.insertOne(body)
+        loginCol.insert_one(body)
         print("Registration complete")
         return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
     else:
@@ -33,18 +37,17 @@ def registration(body):
 
 
 @app.route("/login", methods=['GET', 'POST'])
-def login(body):
-    body = request.body
-    info = json.loads(body)
-    print(info.keys())
+def login():
+    payload_data = request.get_data()
+    loaded_data = json.loads(payload_data.decode('utf-8'))
+    test = json.dumps(loaded_data)
+    body = loaded_data
     result = validate(body)
     # if login information is valid- return True
     if result == True:
-        post = body
         print("Login Successful!")
         return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
-    elif result == False:
-        print("Username or Password is Incorrect")
+
     else:
         return json.dumps({'Fail': False}), 400, {'ContentType': 'application/json'}
 
@@ -60,4 +63,4 @@ def login(body):
 
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(debug=True)
