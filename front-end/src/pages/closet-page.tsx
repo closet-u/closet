@@ -26,9 +26,9 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
 	}
 
 	showImages() {
-		if (this.state.files.length == 0)
+		if (this.state.files.length === 0)
 			return <span>Upload some images to see them here!</span>
-		let images = this.state.files.map((file: any) => <img className={"uploadedImage"} src={file} />)
+		let images = this.state.files.map((file: any) => <img className={"uploadedImage"} src={file} alt={''}/>)
 		return (
 			<div className={"uploadedImageContainer"}>
 				{images}

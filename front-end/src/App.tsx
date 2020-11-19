@@ -1,15 +1,13 @@
 import React from "react"
 import Grid from "@material-ui/core/Grid"
 import Box from "@material-ui/core/Box"
-import Button from "@material-ui/core/Button"
-import ButtonGroup from "@material-ui/core/ButtonGroup"
 import "./App.css"
 import "./pages/closet-page"
 import LoginPage from "./pages/login-page"
 import ClosetPage from "./pages/closet-page"
 import HomePage from "./pages/home-page"
 
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 
 const defaultProps = {
   bgcolor: "background.paper",
