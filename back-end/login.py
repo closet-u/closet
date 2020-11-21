@@ -4,6 +4,7 @@ from flask import Flask, request
 from utils import *
 from backend import *
 from flask_cors import CORS, cross_origin
+from s3_utils import *
 # Flask setup
 app = Flask(__name__)
 cors = CORS(app)
@@ -50,6 +51,15 @@ def login():
 
     else:
         return json.dumps({'Fail': False}), 400, {'ContentType': 'application/json'}
+
+@app.route("/upload", methods =['GET', 'POST'])
+def upload(bucket_name,object_key,data):
+    existing_bucket = False
+    if bucket_exists(bucket_name) == False:
+        create_bucket(bucket_name)
+
+    put_data(bucket_name,object_key,data)
+    print("You have inserted ", data,"into the bucket ", bucket_name)
 
 
 # def main():
