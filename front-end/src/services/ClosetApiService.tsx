@@ -1,48 +1,76 @@
-
 export class ClosetApiService {
-  private cors = "https://cors-anywhere.herokuapp.com/"
+  private cors = "https://cors-anywhere.herokuapp.com/";
   private api_url = "http://127.0.0.1:5000";
   private flask_login = `${this.api_url}/login`;
-  private flask_register = `${this.api_url}/register`
+  private flask_register = `${this.api_url}/register`;
+  private flask_images = `${this.api_url}/images`;
 
   get_user_info(username: string, password: string) {
     const response = fetch(this.flask_login, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({
-        "username": username,
-        "password": password
+        username: username,
+        password: password,
       }),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         "x-requested-with": "XMLHttpRequest",
-      }
+      },
     })
-      .then(response => response)
-      .catch(error => {
-        alert("FAILED " + error)
+      .then((response) => response)
+      .catch((error) => {
+        alert("FAILED " + error);
       });
     return response;
   }
 
   send_register_info(username: string, password: string) {
-    console.log(JSON.stringify({
-      "username": username,
-      "password": password
-    }))
+    console.log(
+      JSON.stringify({
+        username: username,
+        password: password,
+      })
+    );
     const response = fetch(this.flask_register, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({
-        "username": username,
-        "password": password
+        username: username,
+        password: password,
       }),
-      headers: { 'Content-Type': 'application/json' }
-    }
-    ).then(response => response.json())
-      .catch(error => {
-        alert("It no work " + error)
-      }).then(response => {
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .catch((error) => {
+        alert("It no work " + error);
+      })
+      .then((response) => {
         return response.status;
       });
+    return response;
+  }
+
+  getUserImages(username: string): Promise<string[]> {
+    // const response = fetch(`${this.flask_images}/?username=${username}`, {
+    //   method: 'GET',
+    //   headers: { 'Content-Type': 'application/json' }
+    // }
+    // ).then(response => response.json())
+    //   .catch(error => {
+    //     alert("It no work " + error)
+    //   }).then(response => {
+    //     return response.status;
+    //   });
+    let images = [
+      "static/images/SAMPLE2.jpg",
+      "../static/images/SAMPLE2.jpg",
+      "../static/images/SAMPLE2.jpg",
+      "../static/images/SAMPLE2.jpg",
+      "../static/images/SAMPLE2.jpg",
+      "../static/images/SAMPLE2.jpg",
+      "../static/images/SAMPLE2.jpg",
+      "../static/images/SAMPLE2.jpg",
+    ];
+    return new Promise((resolve) => resolve(images));
   }
 }
 

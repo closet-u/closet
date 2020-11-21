@@ -25,12 +25,6 @@ html {
   font-size: 10px;
 }
 
-.menu {
-  padding: 10px;
-  background-color: white;
-  align-self: center;
-  width: 100%;
-}
 
 #title {
   color: black;
@@ -49,5 +43,5 @@ h1 {
 }
 
 .menu {
-  padding: 3px;
+  padding: 30px;
 }
