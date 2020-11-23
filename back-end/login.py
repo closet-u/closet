@@ -53,7 +53,12 @@ def login():
         return json.dumps({'Fail': False}), 400, {'ContentType': 'application/json'}
 
 @app.route("/upload", methods =['GET', 'POST'])
-def upload(bucket_name,object_key,data):
+def upload():
+    payload_data = request.get_data()
+    loaded_data = json.loads(payload_data.decode('utf-8'))
+    test = json.dumps(loaded_data)
+    body = loaded_data
+
     existing_bucket = False
     if bucket_exists(bucket_name) == False:
         create_bucket(bucket_name)
