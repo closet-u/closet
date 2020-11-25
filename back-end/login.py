@@ -59,12 +59,19 @@ def upload():
     test = json.dumps(loaded_data)
     body = loaded_data
 
-    existing_bucket = False
+    bucket_name = body.get("bucket_name")
+    object_key = body.get("object_key")
+    data_json = body.get("data")
+
+    loaded_data1 = json.loads(data_json.decode('utf-8'))
+    test_data = json.dumps(loaded_data1)
+    data = loaded_data1
+
     if bucket_exists(bucket_name) == False:
         create_bucket(bucket_name)
 
     put_data(bucket_name,object_key,data)
-    print("You have inserted ", data,"into the bucket ", bucket_name)
+    print("You have inserted ", data, "into the bucket ", bucket_name, "with the key: " , object_keys)
 
 
 # def main():
