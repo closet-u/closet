@@ -24,3 +24,10 @@ root {
     border-radius: 5px;
     justify-self: center;
 }
+
+
+
+#modal{
+    width: 50%;
+    margin: auto;
+}
