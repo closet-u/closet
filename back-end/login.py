@@ -54,24 +54,30 @@ def login():
 
 @app.route("/upload", methods =['GET', 'POST'])
 def upload():
-    payload_data = request.get_data()
-    loaded_data = json.loads(payload_data.decode('utf-8'))
-    test = json.dumps(loaded_data)
-    body = loaded_data
+    payload_data = response.content
+    parsed = json.loads(response.content)
+    print(parsed)
+    #loaded_data = json.loads(payload_data.decode('utf-8'))
+    #test = json.dumps(payload_data)
+    # body = loaded_data
 
-    bucket_name = body.get("bucket_name")
-    object_key = body.get("object_key")
-    data_json = body.get("data")
+    # bucket_name = body.get("bucket_name")
+    # object_key = body.get("object_key")
+    # data_json = body.get("data")
+    #print(body.get("data"))
 
-    loaded_data1 = json.loads(data_json.decode('utf-8'))
-    test_data = json.dumps(loaded_data1)
-    data = loaded_data1
+    # loaded_data1 = json.loads(data_json.decode('utf-8'))
+    # test_data = json.dumps(loaded_data1)
+    # data = loaded_data1
 
-    if bucket_exists(bucket_name) == False:
-        create_bucket(bucket_name)
+    #if bucket_exists(bucket_name) == False:
+        #create_bucket(bucket_name)
 
-    put_data(bucket_name,object_key,data)
-    print("You have inserted ", data, "into the bucket ", bucket_name, "with the key: " , object_keys)
+    #
+    # upload_file(bucket_name,object_key,data)
+    #print("You have inserted ", data, "into the bucket ", bucket_name, "with the key: " , object_keys)
+    print("FUNCTION WAS CALLED")
+    return Response(200)
 
 
 # def main():
