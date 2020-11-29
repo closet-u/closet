@@ -4,7 +4,6 @@ import logging
 from botocore.exceptions import ClientError
 import pickle
 import base64
-from PIL import Image
 from io import BytesIO
 
 
@@ -58,29 +57,20 @@ def delete_bucket(bucket_name, region, keep_bucket):
 #              opened in read bytes mode.
 
 
-def put_object(bucket, object_key, data):
-<<<<<<< HEAD
-    bucket = 'user-1-closet-u '
+def put_object(object_key, type, color, image):
+
+    bucket = 'user-1-closet-u'
     s3 = boto3.client('s3')
-    compressed_data = pickle.dumps(data)
+    compressed_data = pickle.dumps()
     s3.put_object(bucket, object_key)
-=======
-    put_data = data
-    if isinstance(data, str):
-        try:
-            put_data = open(data, 'rb')
-        except IOError:
-            logger.exception(
-                "Expected file name or binary data, got '%s'.", data)
-            raise
->>>>>>> ea91f8ee44e664074dcaff1b1dc2f4d8baed4e7f
+
 
     with open(img_src, "rb") as img_file:
-        my_string = base64.64encode(img_file.read())
+        my_string = base64.b64encode(img_file.read())
     print(my_string)
 
     im = Image.open(BytesIO(base64.b64decode(my_string)))
-    im.save('image1.png','PNG')
+    im.save('image1.png', 'PNG')
 
     # put_data = data
     # if isinstance(data, str):
@@ -140,3 +130,33 @@ def bucket_exists(bucket_name):
                        bucket_name)
         exists = False
     return exists
+
+def upload_file(file_name, bucket, object_name=None):
+
+    # If S3 object_name was not specified, use file_name
+    if object_name is None:
+        object_name = file_name
+
+    # Upload the file
+    s3_client = boto3.client('s3',aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
+         aws_secret_access_key= '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')
+    try:
+        response = s3_client.upload_file(file_name, bucket, object_name,  ExtraArgs={'Metadata': {'color': 'blue'}})
+    except ClientError as e:
+        logging.error(e)
+        return False
+    return True
+
+def listFiles():
+    s3 = boto3.resource('s3',aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
+         aws_secret_access_key= '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')
+    my_bucket = s3.Bucket('user-1-closet-u')
+    for my_bucket_obj in my_bucket.objects.all():
+        print(my_bucket_obj)
+
+
+def main():
+    upload_file('CHANEL1.jpg','user-1-closet-u',None)
+    listFiles()
+
+main()
