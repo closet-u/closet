@@ -2,6 +2,10 @@ import boto3
 import sys
 import logging
 from botocore.exceptions import ClientError
+import pickle
+import base64
+from PIL import Image
+from io import BytesIO
 
 
 def create_bucket(bucket_name, region = None):
@@ -50,26 +54,38 @@ def delete_bucket(bucket_name, region, keep_bucket):
 #              argument is a string, it is interpreted as a file name, which is
 #              opened in read bytes mode.
 def put_object(bucket, object_key, data):
-    put_data = data
-    if isinstance(data, str):
-        try:
-            put_data = open(data, 'rb')
-        except IOError:
-            logger.exception("Expected file name or binary data, got '%s'.", data)
-            raise
+    bucket = 'user-1-closet-u '
+    s3 = boto3.client('s3')
+    compressed_data = pickle.dumps(data)
+    s3.put_object(bucket, object_key)
 
-    try:
-        obj = bucket.Object(object_key)
-        obj.put(Body=put_data)
-        obj.wait_until_exists()
-        logger.info("Put object '%s' to bucket '%s'.", object_key, bucket.name)
-    except ClientError:
-        logger.exception("Couldn't put object '%s' to bucket '%s'.",
-                         object_key, bucket.name)
-        raise
-    finally:
-        if getattr(put_data, 'close', None):
-            put_data.close()
+    with open(img_src, "rb") as img_file:
+        my_string = base64.64encode(img_file.read())
+    print(my_string)
+
+    im = Image.open(BytesIO(base64.b64decode(my_string)))
+    im.save('image1.png','PNG')
+
+    # put_data = data
+    # if isinstance(data, str):
+    #     try:
+    #         put_data = open(data, 'rb')
+    #     except IOError:
+    #         logger.exception("Expected file name or binary data, got '%s'.", data)
+    #         raise
+    #
+    # try:
+    #     obj = bucket.Object(object_key)
+    #     obj.put(Body=put_data)
+    #     obj.wait_until_exists()
+    #     logger.info("Put object '%s' to bucket '%s'.", object_key, bucket.name)
+    # except ClientError:
+    #     logger.exception("Couldn't put object '%s' to bucket '%s'.",
+    #                      object_key, bucket.name)
+    #     raise
+    # finally:
+    #     if getattr(put_data, 'close', None):
+    #         put_data.close()
 
 #check data exists
 # :param bucket: The bucket that contains the object.
