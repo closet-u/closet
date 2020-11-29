@@ -49,7 +49,7 @@ export class ClosetApiService {
     return response;
   }
 
-  send_images(img_src: string, type: string, color: string, key: string) {
+  send_images(img_src: string, type: string, color: string) {
     /* console.log(
       JSON.stringify({
         username: username,
@@ -60,7 +60,7 @@ export class ClosetApiService {
       method: "POST",
       body: JSON.stringify({
         bucket_name: "User 1",
-        obj_key: "12345",
+        obj_key: "user-1-item",
         data: JSON.stringify({
           img_src: img_src,
           type: type,
