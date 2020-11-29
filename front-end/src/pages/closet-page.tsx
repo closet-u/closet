@@ -25,8 +25,9 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
   }
 
   saveImage(type: Types, color: Colors) {
+    console.log("Calling backend");
     console.log(this.state.currentImage);
-    //this.closetApiService.send_images(this.state.currentImage, type, color);
+    this.closetApiService.sendImages(this.state.currentImage, type, color);
   }
 
   setImages() {
