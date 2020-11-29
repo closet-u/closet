@@ -2,6 +2,8 @@ import React from "react";
 import ClosetApiService from "../services/ClosetApiService";
 import UploadButton from "../components/UploadButton/UploadButton";
 import "./closet-page.css";
+import { Types } from "../models/ClothingTypes";
+import { Colors } from "../models/ClothingColors";
 
 interface ClosetPageState {
   images: any[];
@@ -19,11 +21,17 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
     };
     this.setImages();
     this.handleUpload = this.handleUpload.bind(this);
+    this.saveImage = this.saveImage.bind(this);
+  }
+
+  saveImage(type: Types, color: Colors) {
+    console.log(this.state.currentImage);
+    //this.closetApiService.send_images(this.state.currentImage, type, color);
   }
 
   setImages() {
     // TODO get imgs from manny's backend
-    this.closetApiService.getUserImages("FIXME").then((data: string[]) =>
+    this.closetApiService.getUserImages("User 1").then((data: string[]) =>
       this.setState({
         images: data,
       })
@@ -51,7 +59,6 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
   render() {
     let images = this.state.images;
     console.log({ images });
-    console.log(images[1]);
     return (
       <div className={"root"}>
         <input
@@ -60,10 +67,10 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
           id='contained-button-file'
           type='file'
           onChange={this.handleUpload}
-        >
-          <UploadButton imageUpload={this.state.currentImage} />
-        </input>
-        <label htmlFor='contained-button-file'></label>
+        />
+        <label htmlFor='contained-button-file'>
+          <UploadButton saveImageFunction={this.saveImage} />
+        </label>
         {this.showImages()}
         {/*  <input accept="image/*" className={"input"} id="icon-button-file" type="file" /> */}
       </div>

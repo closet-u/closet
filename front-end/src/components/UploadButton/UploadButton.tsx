@@ -15,30 +15,32 @@ import { Types } from "../../models/ClothingTypes";
 import "./UploadButton.css";
 
 interface UploadButtonProps {
-  imageUpload: any;
+  saveImageFunction: any;
 }
 
 interface UploadButtonState {
   showModal: boolean;
+  color: string;
+  type: string;
 }
 
 class UploadButton extends React.Component<
   UploadButtonProps,
   UploadButtonState
 > {
-  private type = Types.OTHER;
-  private color = Colors.OTHER;
-
   constructor(props: any) {
     super(props);
     this.state = {
       showModal: false,
+      type: Types.OTHER,
+      color: Colors.OTHER,
     };
 
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleTypeChange = this.handleTypeChange.bind(this);
     this.handleColorChange = this.handleColorChange.bind(this);
+    this.handleUploadImage = this.handleUploadImage.bind(this);
   }
 
   handleOpenModal() {
@@ -50,13 +52,15 @@ class UploadButton extends React.Component<
   }
 
   handleColorChange(event: any) {
-    console.log("EVENT TARGET VALUE :: ", event.target.value);
-    console.log("COLOR VALUE :: ", this.color);
-    this.color = event.target.value;
+    this.setState({
+      color: event.target.value,
+    });
   }
 
   handleTypeChange(event: any) {
-    this.type = event.target.value;
+    this.setState({
+      type: event.target.value,
+    });
   }
 
   getColorItems() {
@@ -73,6 +77,10 @@ class UploadButton extends React.Component<
       items.push(<MenuItem value={type}>{type}</MenuItem>)
     );
     return items;
+  }
+
+  handleUploadImage() {
+    this.props.saveImageFunction(this.state.type, this.state.color);
   }
 
   render() {
@@ -98,7 +106,7 @@ class UploadButton extends React.Component<
               <InputLabel className='select-label'>Color</InputLabel>
               <Select
                 className='selector'
-                value={this.color}
+                value={this.state.color}
                 onChange={this.handleColorChange}
               >
                 {this.getColorItems()}
@@ -108,17 +116,17 @@ class UploadButton extends React.Component<
               <InputLabel className='select-label'>Type</InputLabel>
               <Select
                 className='selector'
-                value={this.type}
+                value={this.state.type}
                 onChange={this.handleTypeChange}
               >
                 {this.getTypeItems()}
               </Select>
             </FormControl>
-            {this.props.imageUpload && (
-              <img src={this.props.imageUpload} alt='' />
-            )}
           </DialogContent>
           <DialogActions>
+            <Button onClick={this.handleUploadImage} color='primary'>
+              Close and save
+            </Button>
             <Button onClick={this.handleCloseModal} color='secondary'>
               Close without saving
             </Button>
