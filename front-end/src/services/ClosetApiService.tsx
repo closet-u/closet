@@ -49,25 +49,18 @@ export class ClosetApiService {
     return response;
   }
 
-  send_images(img_src: string, type: string, color: string) {
-    /* console.log(
-      JSON.stringify({
-        username: username,
-        password: password,
-      })
-    ); */
+  sendImages(img_src: string, type: string, color: string) {
+    console.log({ img_src });
     const response = fetch(this.flask_send_image, {
       method: "POST",
-      body: JSON.stringify({
+      body: img_src,
+      headers: {
+        "Content-Type": "image/*",
+        type: type,
+        color: color,
         bucket_name: "User 1",
         obj_key: "user-1-item",
-        data: JSON.stringify({
-          img_src: img_src,
-          type: type,
-          color: color,
-        }),
-      }),
-      headers: { "Content-Type": "application/json" },
+      },
     })
       .then((response) => response.json())
       .catch((error) => {
