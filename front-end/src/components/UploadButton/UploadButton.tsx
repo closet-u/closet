@@ -81,6 +81,7 @@ class UploadButton extends React.Component<
 
   handleUploadImage() {
     this.props.saveImageFunction(this.state.type, this.state.color);
+    this.handleCloseModal();
   }
 
   render() {
