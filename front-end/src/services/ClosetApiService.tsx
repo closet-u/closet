@@ -3,7 +3,7 @@ export class ClosetApiService {
   private api_url = "http://127.0.0.1:5000";
   private flask_login = `${this.api_url}/login`;
   private flask_register = `${this.api_url}/register`;
-  private flask_images = `${this.api_url}/images`;
+  private flask_send_image = `${this.api_url}/upload`;
 
   get_user_info(username: string, password: string) {
     const response = fetch(this.flask_login, {
@@ -49,6 +49,36 @@ export class ClosetApiService {
     return response;
   }
 
+  send_images(img_src: string, type: string, color: string) {
+    /* console.log(
+      JSON.stringify({
+        username: username,
+        password: password,
+      })
+    ); */
+    const response = fetch(this.flask_send_image, {
+      method: "POST",
+      body: JSON.stringify({
+        bucket_name: "User 1",
+        obj_key: "user-1-item",
+        data: JSON.stringify({
+          img_src: img_src,
+          type: type,
+          color: color,
+        }),
+      }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .catch((error) => {
+        alert("It no work " + error);
+      })
+      .then((response) => {
+        return response.status;
+      });
+    return response;
+  }
+
   getUserImages(username: string): Promise<string[]> {
     // const response = fetch(`${this.flask_images}/?username=${username}`, {
     //   method: 'GET',
@@ -61,11 +91,10 @@ export class ClosetApiService {
     //     return response.status;
     //   });
     let images = [
-      "static/images/SAMPLE2.jpg",
-      "../static/images/SAMPLE2.jpg",
-      "../static/images/SAMPLE2.jpg",
-      "../static/images/SAMPLE2.jpg",
-      "../static/images/SAMPLE2.jpg",
+      "https://m.media-amazon.com/images/M/MV5BZTdlNzhmYmYtOGE3Zi00NTViLWFhM2UtYWQ4NjMzNGRiYTU3XkEyXkFqcGdeQXVyMTkzODUwNzk@._V1_UY268_CR11,0,182,268_AL_.jpg",
+      "/Users/claudiasychev/closet-u/front-end/src/static/images/SAMPLE3.jpg",
+      "../static/images/hanger.jpg",
+      "./SAMPLE2.jpg",
       "../static/images/SAMPLE2.jpg",
       "../static/images/SAMPLE2.jpg",
       "../static/images/SAMPLE2.jpg",

@@ -1,11 +1,13 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
-import "./closet-page.css";
 import ClosetApiService from "../services/ClosetApiService";
-import { pathToFileURL } from "url";
+import UploadButton from "../components/UploadButton/UploadButton";
+import "./closet-page.css";
+import { Types } from "../models/ClothingTypes";
+import { Colors } from "../models/ClothingColors";
 
 interface ClosetPageState {
   images: any[];
+  currentImage: any;
 }
 
 class ClosetPage extends React.Component<{}, ClosetPageState> {
@@ -15,29 +17,25 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
     super(props);
     this.state = {
       images: [],
+      currentImage: {} as File,
     };
     this.setImages();
     this.handleUpload = this.handleUpload.bind(this);
+    this.saveImage = this.saveImage.bind(this);
+  }
+
+  saveImage(type: Types, color: Colors) {
+    console.log(this.state.currentImage);
+    //this.closetApiService.send_images(this.state.currentImage, type, color);
   }
 
   setImages() {
-    this.closetApiService.getUserImages("FIXME").then((data: string[]) =>
+    // TODO get imgs from manny's backend
+    this.closetApiService.getUserImages("User 1").then((data: string[]) =>
       this.setState({
         images: data,
       })
     );
-  }
-
-  handleUpload(event: any) {
-    if (event.target.files.length > 0) {
-      // TODO send `event.target.files` to the backend
-      let uploadedImages = Array.from(event.target.files).map((file: any) =>
-        URL.createObjectURL(file)
-      );
-      this.setState({
-        images: this.state.images.concat(uploadedImages),
-      });
-    }
   }
 
   showImages() {
@@ -50,6 +48,14 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
     return <div className={"uploadedImageContainer"}>{images}</div>;
   }
 
+  handleUpload(event: any) {
+    if (event.target.files.length > 0) {
+      this.setState({
+        currentImage: event.target.files[0],
+      });
+    }
+  }
+
   render() {
     let images = this.state.images;
     console.log({ images });
@@ -59,19 +65,11 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
           accept='image/*'
           className={"input"}
           id='contained-button-file'
-          multiple
           type='file'
           onChange={this.handleUpload}
         />
         <label htmlFor='contained-button-file'>
-          <Button
-            className={"uploadButton"}
-            variant='contained'
-            color='default'
-            component='span'
-          >
-            Upload
-          </Button>
+          <UploadButton saveImageFunction={this.saveImage} />
         </label>
         {this.showImages()}
         {/*  <input accept="image/*" className={"input"} id="icon-button-file" type="file" /> */}
