@@ -54,30 +54,25 @@ def login():
 
 @app.route("/upload", methods =['GET', 'POST'])
 def upload():
-    payload_data = response.content
-    parsed = json.loads(response.content)
-    print(parsed)
-    #loaded_data = json.loads(payload_data.decode('utf-8'))
-    #test = json.dumps(payload_data)
-    # body = loaded_data
+    bucket_name = 'user-1-closet-u'
+    image_file = request.get_data()
+    file_type = request.mimetype
+    color = request.headers.get('color')
+    clothing_type = request.headers.get('type')
+    print("COLOR :: ", color)
+    print("TYPE :: ", clothing_type)
 
-    # bucket_name = body.get("bucket_name")
-    # object_key = body.get("object_key")
-    # data_json = body.get("data")
-    #print(body.get("data"))
-
-    # loaded_data1 = json.loads(data_json.decode('utf-8'))
-    # test_data = json.dumps(loaded_data1)
-    # data = loaded_data1
+    bucket_name = request.headers.get("bucket_name")
+    object_key = request.headers.get("obj_key")
 
     #if bucket_exists(bucket_name) == False:
         #create_bucket(bucket_name)
 
     #
-    # upload_file(bucket_name,object_key,data)
+    upload_file(image_file,bucket_name, color, clothing_type, file_type)
     #print("You have inserted ", data, "into the bucket ", bucket_name, "with the key: " , object_keys)
     print("FUNCTION WAS CALLED")
-    return Response(200)
+    return " :')"
 
 
 # def main():

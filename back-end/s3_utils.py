@@ -131,17 +131,20 @@ def bucket_exists(bucket_name):
         exists = False
     return exists
 
-def upload_file(file_name, bucket, object_name=None):
-
+def upload_file(file, bucket, c_color, c_type, file_t ,object_name=None):
+    
+    color = ''
     # If S3 object_name was not specified, use file_name
     if object_name is None:
-        object_name = file_name
+        object_name = file
 
     # Upload the file
+    print(file)
     s3_client = boto3.client('s3',aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
          aws_secret_access_key= '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')
     try:
-        response = s3_client.upload_file(file_name, bucket, object_name,  ExtraArgs={'Metadata': {'color': 'blue'}})
+        response = s3_client.put_object(Body=file, Bucket=bucket, Key='image1.jpg', ContentType=file_t,  Metadata={color: c_color})
+        print(response)
     except ClientError as e:
         logging.error(e)
         return False
@@ -155,8 +158,8 @@ def listFiles():
         print(my_bucket_obj)
 
 
-def main():
-    upload_file('CHANEL1.jpg','user-1-closet-u',None)
-    listFiles()
+# def main():
+#     upload_file('CHANEL1.jpg','user-1-closet-u',None)
+#     listFiles()
 
-main()
+# main()
