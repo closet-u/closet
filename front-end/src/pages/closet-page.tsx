@@ -32,11 +32,19 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
 
   setImages() {
     // TODO get imgs from manny's backend
-    this.closetApiService.getUserImages("User 1").then((data: string[]) =>
-      this.setState({
-        images: data,
-      })
-    );
+    this.closetApiService.getUserImages("User 1").then((data: any) => {
+      console.log({ data });
+      if (data) {
+        let images = [];
+        for (let image in data) {
+          images.push(data[image]);
+        }
+        console.log({ images });
+        this.setState({
+          images: images,
+        });
+      }
+    });
   }
 
   showImages() {

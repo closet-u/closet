@@ -5,6 +5,7 @@ from utils import *
 from backend import *
 from flask_cors import CORS, cross_origin
 from s3_utils import *
+import json
 # Flask setup
 app = Flask(__name__)
 cors = CORS(app)
@@ -59,8 +60,9 @@ def upload():
     file_type = request.mimetype
     color = request.headers.get('color')
     clothing_type = request.headers.get('type')
+
     print("COLOR :: ", color)
-    print("TYPE :: ", clothing_type)
+    print("CLOTHING_TYPE :: ", clothing_type)
 
     bucket_name = request.headers.get("bucket_name")
     object_key = request.headers.get("obj_key")
@@ -72,7 +74,15 @@ def upload():
     upload_file(image_file,bucket_name, color, clothing_type, file_type)
     #print("You have inserted ", data, "into the bucket ", bucket_name, "with the key: " , object_keys)
     print("FUNCTION WAS CALLED")
-    return " :')"
+    return '',200
+
+@app.route("/retrieve", methods =['GET', 'POST'])
+def retrieve():
+    jsonified_images = {}
+    images = listFiles()
+    jsonified_images = json.dumps(images)
+    return jsonified_images
+
 
 
 # def main():
@@ -87,3 +97,4 @@ def upload():
 
 if __name__ == '__main__':
     app.run(debug=True)
+

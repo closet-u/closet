@@ -1,4 +1,5 @@
 import boto3
+from boto3 import client
 import sys
 import logging
 from botocore.exceptions import ClientError
@@ -101,10 +102,14 @@ def put_object(object_key, type, color, image):
 
 def get_object(bucket, object_key):
 
+    s3 = boto3.resource('s3',aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
+    aws_secret_access_key= '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')
+    my_bucket = s3.Bucket(bucket)
+
     try:
-        body = bucket.Object(object_key).get()['Body'].read()
-        logger.info("Got object '%s' from bucket '%s'.",
-                    object_key, bucket.name)
+        body = my_bucket.Object(object_key).get()['Body'].read()
+        # logger.info("Got object '%s' from bucket '%s'.",
+        #             object_key, bucket.name)
     except ClientError:
         logger.exception(("Couldn't get object '%s' from bucket '%s'.",
                           object_key, bucket.name))
@@ -141,8 +146,8 @@ def upload_file(file, bucket, c_color, c_type, file_t ,object_name=None):
         object_name = file
 
     # Upload the file
-    s3_client = boto3.client('s3',aws_access_key_id='',
-         aws_secret_access_key= '')
+    s3_client = boto3.client('s3',aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
+         aws_secret_access_key= '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')
     try:
         response = s3_client.put_object(Body=file, Bucket=bucket, Key='image1.jpg', ContentType=file_t,  Metadata=meta_data )
     except ClientError as e:
@@ -152,15 +157,29 @@ def upload_file(file, bucket, c_color, c_type, file_t ,object_name=None):
 
 
 def listFiles():
-    s3 = boto3.resource('s3',aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
-         aws_secret_access_key= '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')
-    my_bucket = s3.Bucket('user-1-closet-u')
-    for my_bucket_obj in my_bucket.objects.all():
-        print(my_bucket_obj)
+    images = {}
+    conn = client('s3',aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
+    aws_secret_access_key= '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')
+    for key in conn.list_objects(Bucket='user-1-closet-u')['Contents']:
+        image = get_object('user-1-closet-u', key['Key'])
+        encoded_image = base64.b64encode(image)
+        decoded_image = encoded_image.decode('utf-8')
+        #print(image)
+        obj_key = key['Key']
+        #print(obj_key)
+        images.update({obj_key:decoded_image})
+    return images
+
+def success():
+    if method == "POST": 
+        print(request.json.keys())
+    return 200
 
 
 # def main():
-#     upload_file('CHANEL1.jpg','user-1-closet-u',None)
-#     listFiles()
+#     dict = listFiles()
+#     for i,k in dict.items():
+#         print(type(k.decode('utf-8')))
+    
 
 # main()
