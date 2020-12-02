@@ -94,7 +94,7 @@ class UploadButton extends React.Component<
           component='span'
           onClick={this.handleOpenModal}
         >
-          Upload
+          Upload Clothing Item
         </Button>
         <Dialog
           open={this.state.showModal}

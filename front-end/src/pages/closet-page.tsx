@@ -4,10 +4,12 @@ import UploadButton from "../components/UploadButton/UploadButton";
 import "./closet-page.css";
 import { Types } from "../models/ClothingTypes";
 import { Colors } from "../models/ClothingColors";
+import { CircularProgress } from "@material-ui/core";
 
 interface ClosetPageState {
   images: any[];
   currentImage: any;
+  loading: boolean;
 }
 
 class ClosetPage extends React.Component<{}, ClosetPageState> {
@@ -18,6 +20,7 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
     this.state = {
       images: [],
       currentImage: {} as File,
+      loading: true,
     };
     this.setImages();
     this.handleUpload = this.handleUpload.bind(this);
@@ -28,20 +31,32 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
     console.log("Calling backend");
     console.log(this.state.currentImage);
     this.closetApiService.sendImages(this.state.currentImage, type, color);
+    this.sleep(4000);
+    this.setImages();
+  }
+
+  sleep(milliseconds: any) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
   }
 
   setImages() {
-    // TODO get imgs from manny's backend
     this.closetApiService.getUserImages("User 1").then((data: any) => {
       console.log({ data });
       if (data) {
         let images = [];
         for (let image in data) {
-          images.push(data[image]);
+          images.push(
+            `https://user-1-closet-u.s3.us-east-2.amazonaws.com/${image}`
+          );
         }
         console.log({ images });
         this.setState({
           images: images,
+          loading: false,
         });
       }
     });
@@ -80,7 +95,7 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
         <label htmlFor='contained-button-file'>
           <UploadButton saveImageFunction={this.saveImage} />
         </label>
-        {this.showImages()}
+        {this.state.loading ? <CircularProgress /> : this.showImages()}
         {/*  <input accept="image/*" className={"input"} id="icon-button-file" type="file" /> */}
       </div>
     );

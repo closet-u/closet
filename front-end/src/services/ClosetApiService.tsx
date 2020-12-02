@@ -69,7 +69,7 @@ export class ClosetApiService {
         return response.status;
       })
       .catch((error) => {
-        alert("It no work " + error);
+        console.log(error);
       });
     return response;
   }
@@ -86,7 +86,7 @@ export class ClosetApiService {
         return response;
       })
       .catch((error) => {
-        alert("It no work " + error);
+        return new Promise((resolve) => resolve([]));
       });
     return response;
     // let images = [
