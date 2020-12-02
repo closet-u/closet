@@ -6,6 +6,8 @@ from botocore.exceptions import ClientError
 import pickle
 import base64
 from io import BytesIO
+import random
+import string
 
 
 def create_bucket(bucket_name, region=None):
@@ -65,7 +67,6 @@ def put_object(object_key, type, color, image):
     compressed_data = pickle.dumps()
     s3.put_object(bucket, object_key)
 
-
     with open(img_src, "rb") as img_file:
         my_string = base64.b64encode(img_file.read())
     print(my_string)
@@ -102,8 +103,8 @@ def put_object(object_key, type, color, image):
 
 def get_object(bucket, object_key):
 
-    s3 = boto3.resource('s3',aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
-    aws_secret_access_key= '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')
+    s3 = boto3.resource('s3', aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
+                        aws_secret_access_key='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')
     my_bucket = s3.Bucket(bucket)
 
     try:
@@ -136,50 +137,64 @@ def bucket_exists(bucket_name):
         exists = False
     return exists
 
-def upload_file(file, bucket, c_color, c_type, file_t ,object_name=None):
+
+def upload_file(file, bucket, c_color, c_type, file_t, object_name=None):
     color = ''
     meta_data = {
         color: c_color
     }
+    key_tag = get_random_string(8)
+    key_with_exten = key_tag + ".jpg"
+    official_key = key_with_exten.strip()
     # If S3 object_name was not specified, use file_name
     if object_name is None:
         object_name = file
 
     # Upload the file
-    s3_client = boto3.client('s3',aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
-         aws_secret_access_key= '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')
+    s3_client = boto3.client('s3', aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
+                             aws_secret_access_key='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')
     try:
-        response = s3_client.put_object(Body=file, Bucket=bucket, Key='image1.jpg', ContentType=file_t,  Metadata=meta_data )
+        response = s3_client.put_object(ACL='public-read',
+                                        Body=file,
+                                        Bucket=bucket, Key=official_key,
+                                        ContentType=file_t,
+                                        Metadata=meta_data)
     except ClientError as e:
-        #logging.error(e)
+        # logging.error(e)
         return False
     return True
 
 
 def listFiles():
     images = {}
-    conn = client('s3',aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
-    aws_secret_access_key= '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')
+    conn = client('s3', aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
+                  aws_secret_access_key='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')
     for key in conn.list_objects(Bucket='user-1-closet-u')['Contents']:
         image = get_object('user-1-closet-u', key['Key'])
         encoded_image = base64.b64encode(image)
         decoded_image = encoded_image.decode('utf-8')
-        #print(image)
+        # print(image)
         obj_key = key['Key']
-        #print(obj_key)
-        images.update({obj_key:decoded_image})
+        # print(obj_key)
+        images.update({obj_key: decoded_image})
     return images
 
+
 def success():
-    if method == "POST": 
+    if method == "POST":
         print(request.json.keys())
     return 200
 
 
+def get_random_string(length):
+    letters = string.ascii_lowercase
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    return result_str
+
+
 # def main():
-#     dict = listFiles()
-#     for i,k in dict.items():
-#         print(type(k.decode('utf-8')))
-    
+#     stringo = get_random_string(8)
+#     print(stringo)
+
 
 # main()
