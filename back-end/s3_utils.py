@@ -62,7 +62,7 @@ def delete_bucket(bucket_name, region, keep_bucket):
 
 def put_object(object_key, type, color, image):
 
-    bucket = 'user-1-closet-u'
+    bucket = 'test-account-images'
     s3 = boto3.client('s3')
     compressed_data = pickle.dumps()
     s3.put_object(bucket, object_key)
@@ -103,8 +103,8 @@ def put_object(object_key, type, color, image):
 
 def get_object(bucket, object_key):
 
-    s3 = boto3.resource('s3', aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
-                        aws_secret_access_key='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')
+    s3 = boto3.resource('s3', aws_access_key_id='',
+                        aws_secret_access_key='')
     my_bucket = s3.Bucket(bucket)
 
     try:
@@ -151,8 +151,8 @@ def upload_file(file, bucket, c_color, c_type, file_t, object_name=None):
         object_name = file
 
     # Upload the file
-    s3_client = boto3.client('s3', aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
-                             aws_secret_access_key='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')
+    s3_client = client('s3', aws_access_key_id='',
+                       aws_secret_access_key='')
     try:
         response = s3_client.put_object(ACL='public-read',
                                         Body=file,
@@ -167,10 +167,13 @@ def upload_file(file, bucket, c_color, c_type, file_t, object_name=None):
 
 def listFiles():
     images = {}
-    conn = client('s3', aws_access_key_id='AKIAJVXV2VSYB3K6BJYQ',
-                  aws_secret_access_key='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')
-    for key in conn.list_objects(Bucket='user-1-closet-u')['Contents']:
-        image = get_object('user-1-closet-u', key['Key'])
+    # boto3
+    s3_client = client('s3', aws_access_key_id='',
+                       aws_secret_access_key='')
+    # for key in s3_client.list_objects(Bucket='test-account-images')['Contents']:
+    print (s3_client.list_objects(Bucket='test-account-images'))
+    for key in s3_client.list_objects(Bucket='test-account-images')['Contents']:
+        image = get_object('test-account-images', key['Key'])
         encoded_image = base64.b64encode(image)
         decoded_image = encoded_image.decode('utf-8')
         # print(image)

@@ -53,9 +53,10 @@ def login():
     else:
         return json.dumps({'Fail': False}), 400, {'ContentType': 'application/json'}
 
-@app.route("/upload", methods =['GET', 'POST'])
+
+@app.route("/upload", methods=['GET', 'POST'])
 def upload():
-    bucket_name = 'user-1-closet-u'
+    bucket_name = 'test-account-images'
     image_file = request.get_data()
     file_type = request.mimetype
     color = request.headers.get('color')
@@ -67,22 +68,22 @@ def upload():
     bucket_name = request.headers.get("bucket_name")
     object_key = request.headers.get("obj_key")
 
-    #if bucket_exists(bucket_name) == False:
-        #create_bucket(bucket_name)
+    # if bucket_exists(bucket_name) == False:
+    # create_bucket(bucket_name)
 
     #
-    upload_file(image_file,bucket_name, color, clothing_type, file_type)
+    upload_file(image_file, bucket_name, color, clothing_type, file_type)
     #print("You have inserted ", data, "into the bucket ", bucket_name, "with the key: " , object_keys)
     print("FUNCTION WAS CALLED")
-    return '',200
+    return '', 200
 
-@app.route("/retrieve", methods =['GET', 'POST'])
+
+@app.route("/retrieve", methods=['GET', 'POST'])
 def retrieve():
     jsonified_images = {}
     images = listFiles()
     jsonified_images = json.dumps(images)
     return jsonified_images
-
 
 
 # def main():
@@ -94,7 +95,5 @@ def retrieve():
 #
 # main()
 
-
 if __name__ == '__main__':
     app.run(debug=True)
-
