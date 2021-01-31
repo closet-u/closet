@@ -31,6 +31,7 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
     console.log("Calling backend");
     console.log(this.state.currentImage);
     this.closetApiService.sendImages(this.state.currentImage, type, color);
+    //PLS DONT DO THIS FIX THIS THIS IS BAD
     this.sleep(4000);
     this.setImages();
   }
@@ -50,7 +51,7 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
         let images = [];
         for (let image in data) {
           images.push(
-            `https://user-1-closet-u.s3.us-east-2.amazonaws.com/${image}`
+            `https://test-account-images.s3.us-east-2.amazonaws.com/${image}`
           );
         }
         console.log({ images });

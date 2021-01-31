@@ -1,0 +1,36 @@
+.allAssemblyComponents{
+  display: flex;
+}
+
+.imageContainer {
+  display: grid;
+  border-left: 10px;
+  border-radius: 15px;
+  background-color: rgba(161, 106, 23, 0.671);
+  max-width: 550px;
+  
+  margin: 50px;
+  min-height: 700px;
+}
+
+.assemble {
+  display: grid;
+  
+  border-left: 10px;
+  border-radius: 30px;
+  background-color: rgba(161, 106, 23, 0.671);
+  min-width: 550px;
+  align-self: left;
+  
+  margin: 50px;
+  min-height: 700px;
+}
+
+#help {
+  margin: 10px;
+  border: 2px solid black;
+  border-radius: 5px;
+  justify-self: center;
+}
+
+ /* grid-template-rows: 1fr 1fr; */

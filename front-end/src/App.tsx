@@ -6,6 +6,10 @@ import "./pages/closet-page";
 import LoginPage from "./pages/login-page";
 import ClosetPage from "./pages/closet-page";
 import HomePage from "./pages/home-page";
+import AssemblingPage from "./pages/assembling-page";
+import Button from "@material-ui/core/Button";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -16,13 +20,45 @@ const defaultProps = {
 };
 
 function App() {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const redirect = () => {
+    window.location.href = "http://localhost:3000/assembling-page";
+  };
+  const redirectCloset = () => {
+    window.location.href = "http://localhost:3000/closet-page";
+  };
   return (
     <Router>
       {/* REFACTOR: MOVE TO MAIN PAGE*/}
       <h1 id='title'>Closet-U</h1>
       <Box borderBottom={2} {...defaultProps} />
       <div className='menu'>
-        <Grid container justify='center'></Grid>
+        <Button
+          aria-controls='simple-menu'
+          aria-haspopup='true'
+          onClick={handleClick}
+        >
+          Open Menu
+        </Button>
+        <Menu
+          id='simple-menu'
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={redirectCloset}>My Closet</MenuItem>
+          <MenuItem onClick={redirect}>Assemble</MenuItem>
+          <MenuItem onClick={handleClose}>Logout</MenuItem>
+        </Menu>
       </div>
 
       <Box borderBottom={2} {...defaultProps} />
@@ -31,6 +67,7 @@ function App() {
         <Route path='/login' component={LoginPage} />
         <Route path='/closet-page' component={ClosetPage} />
         <Route path='/home-page' component={HomePage} />
+        <Route path='/assembling-page' component={AssemblingPage} />
       </Switch>
     </Router>
   );

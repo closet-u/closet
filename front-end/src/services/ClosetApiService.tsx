@@ -25,6 +25,8 @@ export class ClosetApiService {
     return response;
   }
 
+  fake_it() {}
+
   send_register_info(username: string, password: string) {
     console.log(
       JSON.stringify({
@@ -59,7 +61,7 @@ export class ClosetApiService {
         "Content-Type": "image/*",
         type: type,
         color: color,
-        bucket_name: "user-1-closet-u",
+        bucket_name: "test-account-images",
         obj_key: "user-1-item",
       },
     })
