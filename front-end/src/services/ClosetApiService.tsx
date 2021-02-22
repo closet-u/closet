@@ -1,3 +1,5 @@
+import { ImageMetadata } from "../models/ImageMetadata";
+
 export class ClosetApiService {
   private cors = "https://cors-anywhere.herokuapp.com/";
   private api_url = "http://127.0.0.1:5000";
@@ -5,6 +7,7 @@ export class ClosetApiService {
   private flask_register = `${this.api_url}/register`;
   private flask_send_image = `${this.api_url}/upload`;
   private flask_retrieve_images = `${this.api_url}/retrieve`;
+  private flask_retrieve_sorted_images = `${this.api_url}/sort`;
 
   get_user_info(username: string, password: string) {
     const response = fetch(this.flask_login, {
@@ -76,7 +79,7 @@ export class ClosetApiService {
     return response;
   }
 
-  getUserImages(username: string): Promise<string[]> {
+  getUserImages(username: string): Promise<ImageMetadata[]> {
     const response = fetch(`${this.flask_retrieve_images}`, {
       method: "GET",
       headers: { "Content-Type": "application/json", Accept: "image/*" },
@@ -101,6 +104,26 @@ export class ClosetApiService {
     //   "../static/images/SAMPLE2.jpg",
     // ];
     // return new Promise((resolve) => resolve(images));
+  }
+
+  getImagesWithSelectedTags(
+    clothingType: string,
+    color: string
+  ): Promise<string[]> {
+    const response = fetch(`${this.flask_retrieve_sorted_images}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json", Accept: "image/*" },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log("call succeeded, got this:");
+        console.log(response);
+        return response;
+      })
+      .catch((error) => {
+        return new Promise((resolve) => resolve([]));
+      });
+    return response;
   }
 }
 

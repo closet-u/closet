@@ -3,34 +3,56 @@
 }
 
 .imageContainer {
-  display: grid;
+  display: flex;
   border-left: 10px;
   border-radius: 15px;
   background-color: rgba(161, 106, 23, 0.671);
-  max-width: 550px;
-  
+  max-width: 500px;
+  min-width: 500px;
+  flex-direction: column ;
+  flex-wrap: wrap;
   margin: 50px;
-  min-height: 700px;
+  max-height: 700px;
+  overflow: scroll;
+  align-self: left;
+}
+
+.uploadedImage_toAssemble {
+  max-width: 100px;
+  max-height: 150px;
+  margin: 10px;
+  border: 2px solid black;
+  border-radius: 5px;
+  justify-self: center;
 }
 
 .assemble {
-  display: grid;
-  
-  border-left: 10px;
-  border-radius: 30px;
+  /* display: grid; */
+  /* flex-wrap: wrap; */
+  border-left: 100px;
+  border-radius: 15px;
   background-color: rgba(161, 106, 23, 0.671);
-  min-width: 550px;
-  align-self: left;
-  
+  min-width: 500px;
+  max-width: 500px;
+  align-self: right !important;
   margin: 50px;
+  margin-left: 100px;
   min-height: 700px;
 }
-
+#message_to_assemble{
+  margin-left: 20px;
+  margin-top: 20px;
+  
+}
 #help {
   margin: 10px;
   border: 2px solid black;
   border-radius: 5px;
   justify-self: center;
+}
+
+.assembling-page {
+  display: flex;
 }
 
  /* grid-template-rows: 1fr 1fr; */

@@ -1,99 +1,70 @@
 import React from "react";
 import Grid, { GridSpacing } from "@material-ui/core/Grid";
 import Draggable from "react-draggable";
+import ClosetApiService from "../services/ClosetApiService";
+import { CircularProgress } from "@material-ui/core";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 
 import "./assembling-page.css";
 
-class AssemblingPage extends React.Component {
-  render() {
-    var images: string[];
-    images = ["./blk_TOP.jpg", "./BOOTS.jpg"];
-    console.log(images);
-    {
-      images.map((image: any) => console.log(image));
-    }
-    return (
-      <div className={"allAssemblyComponents"}>
-        <div className={"imageContainer"}>
-          <Grid
-            container
-            className={"grid"}
-            direction='row'
-            alignItems='flex-start'
-            spacing={2}
-          >
-            <Grid item xs>
-              <Draggable>
-                <img
-                  src={require("./DJEANS.jpg")}
-                  alt='test'
-                  width='150'
-                  height='150'
-                  id='help'
-                ></img>
-              </Draggable>
-            </Grid>
-            <Grid item xs={4}>
-              <Draggable>
-                <img
-                  src={require("./HEELS.jpg")}
-                  alt='test'
-                  width='150'
-                  height='150'
-                  id='help'
-                ></img>
-              </Draggable>
-            </Grid>
-            <Grid item xs={4}>
-              <Draggable>
-                <img
-                  src={require("./WJEANS.jpg")}
-                  alt='test'
-                  width='150'
-                  height='150'
-                  id='help'
-                ></img>
-              </Draggable>
-            </Grid>
+interface AssemblingPageState {
+  images: any[];
+  loading: boolean;
+}
 
-            <Grid item xs={4}>
-              <Draggable>
-                <img
-                  src={require("./BOOTS.jpg")}
-                  alt='test'
-                  width='150'
-                  height='150'
-                  id='help'
-                ></img>
-              </Draggable>
-            </Grid>
-            <Grid item xs={4}>
-              <Draggable>
-                <img
-                  src={require("./blk_TOP.jpg")}
-                  alt='test'
-                  width='150'
-                  height='100'
-                  id='help'
-                ></img>
-              </Draggable>
-            </Grid>
-            <Grid item xs={4}>
-              <Draggable>
-                <img
-                  src={require("./CARDI.jpg")}
-                  alt='test'
-                  width='150'
-                  height='150'
-                  id='help'
-                ></img>
-              </Draggable>
-            </Grid>
-          </Grid>
+class AssemblingPage extends React.Component<{}, AssemblingPageState> {
+  closetApiService = new ClosetApiService();
+  fileUrl = require("file-url");
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      images: [],
+      loading: true,
+    };
+    this.setImages();
+  }
+
+  setImages() {
+    this.closetApiService.getUserImages("User 1").then((data: any) => {
+      console.log({ data });
+      if (data) {
+        let images = [];
+        for (let image in data) {
+          images.push(
+            `https://test-account-images.s3.us-east-2.amazonaws.com/${image}`
+          );
+        }
+        console.log({ images });
+        this.setState({
+          images: images,
+          loading: false,
+        });
+      }
+    });
+  }
+
+  showImages() {
+    console.log(this.state.images);
+    if (this.state.images.length === 0)
+      return <span>Upload some images to see them here!</span>;
+    let images = this.state.images.map((file: any) => (
+      <Draggable>
+        <img className={"uploadedImage_toAssemble"} src={file} alt={file} />
+      </Draggable>
+    ));
+    return <div className={"imageContainer"}>{images}</div>;
+  }
+
+  render() {
+    let images = this.state.images;
+    return (
+      <div className='assembling-page'>
+        {this.state.loading ? <CircularProgress /> : this.showImages()}
+
+        <div className={"assemble"}>
+          <div id='message_to_assemble'>Assemble images here!</div>
         </div>
-        <div className={"assemble"}>Assemble images here!</div>
       </div>
     );
   }

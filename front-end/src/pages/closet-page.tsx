@@ -5,6 +5,7 @@ import "./closet-page.css";
 import { Types } from "../models/ClothingTypes";
 import { Colors } from "../models/ClothingColors";
 import { CircularProgress } from "@material-ui/core";
+import { ImageMetadata } from "../models/ImageMetadata";
 
 interface ClosetPageState {
   images: any[];
@@ -32,6 +33,7 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
     console.log(this.state.currentImage);
     this.closetApiService.sendImages(this.state.currentImage, type, color);
     //PLS DONT DO THIS FIX THIS THIS IS BAD
+    //Make a loading sign and completion sign
     this.sleep(4000);
     this.setImages();
   }
@@ -45,22 +47,25 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
   }
 
   setImages() {
-    this.closetApiService.getUserImages("User 1").then((data: any) => {
-      console.log({ data });
-      if (data) {
-        let images = [];
-        for (let image in data) {
-          images.push(
-            `https://test-account-images.s3.us-east-2.amazonaws.com/${image}`
-          );
+    this.closetApiService
+      .getUserImages("User 1")
+      .then((data: ImageMetadata[]) => {
+        console.log({ data });
+        if (data) {
+          let images: string[] = [];
+          data.forEach((imageObject) => {
+            console.log({ imageObject });
+            images.push(
+              `https://test-account-images.s3.us-east-2.amazonaws.com/${imageObject.filename}`
+            );
+          });
+          console.log({ images });
+          this.setState({
+            images: images,
+            loading: false,
+          });
         }
-        console.log({ images });
-        this.setState({
-          images: images,
-          loading: false,
-        });
-      }
-    });
+      });
   }
 
   showImages() {
@@ -80,6 +85,27 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
       });
     }
   }
+
+  /* sortImages(event: any) {
+    this.closetApiService
+      .getImagesWithSelectedTags(type, color)
+      .then((data: any) => {
+        console.log({ data });
+        if (data) {
+          let images = [];
+          for (let image in data) {
+            images.push(
+              `https://test-account-images.s3.us-east-2.amazonaws.com/${image}`
+            );
+          }
+          console.log({ images });
+          this.setState({
+            images: images,
+            loading: false,
+          });
+        }
+      });
+  } */
 
   render() {
     let images = this.state.images;

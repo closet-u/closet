@@ -1,4 +1,3 @@
-//import React from "react";
 import React, { createRef, Component } from "react";
 import Modal from "react-modal";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -12,22 +11,19 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Colors } from "../../models/ClothingColors";
 import { Types } from "../../models/ClothingTypes";
-import "./UploadButton.css";
+import "./SortButton.css";
 
-interface UploadButtonProps {
-  saveImageFunction: (type: Types, color: Colors) => void;
+interface SortButtonProps {
+  saveImageFunction: any;
 }
 
-interface UploadButtonState {
+interface SortButtonState {
   showModal: boolean;
-  color: Colors;
-  type: Types;
+  color: string;
+  type: string;
 }
 
-class UploadButton extends React.Component<
-  UploadButtonProps,
-  UploadButtonState
-> {
+class SortButton extends React.Component<SortButtonProps, SortButtonState> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -40,7 +36,7 @@ class UploadButton extends React.Component<
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleTypeChange = this.handleTypeChange.bind(this);
     this.handleColorChange = this.handleColorChange.bind(this);
-    this.handleUploadImage = this.handleUploadImage.bind(this);
+    this.handleSortImage = this.handleSortImage.bind(this);
   }
 
   handleOpenModal() {
@@ -79,7 +75,7 @@ class UploadButton extends React.Component<
     return items;
   }
 
-  handleUploadImage() {
+  handleSortImage() {
     this.props.saveImageFunction(this.state.type, this.state.color);
     this.handleCloseModal();
   }
@@ -88,13 +84,13 @@ class UploadButton extends React.Component<
     return (
       <div>
         <Button
-          className={"uploadButton"}
+          className={"SortButton"}
           variant='contained'
           color='default'
           component='span'
           onClick={this.handleOpenModal}
         >
-          Upload Clothing Item
+          Sort Clothing Item
         </Button>
         <Dialog
           open={this.state.showModal}
@@ -103,7 +99,7 @@ class UploadButton extends React.Component<
         >
           <DialogTitle>Edit image tags</DialogTitle>
           <DialogContent>
-            <FormControl className='upload-form-color'>
+            <FormControl className='Sort-form-color'>
               <InputLabel className='select-label'>Color</InputLabel>
               <Select
                 className='selector'
@@ -113,7 +109,7 @@ class UploadButton extends React.Component<
                 {this.getColorItems()}
               </Select>
             </FormControl>
-            <FormControl className='upload-form-type'>
+            <FormControl className='Sort-form-type'>
               <InputLabel className='select-label'>Type</InputLabel>
               <Select
                 className='selector'
@@ -125,7 +121,7 @@ class UploadButton extends React.Component<
             </FormControl>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleUploadImage} color='primary'>
+            <Button onClick={this.handleSortImage} color='primary'>
               Close and save
             </Button>
             <Button onClick={this.handleCloseModal} color='secondary'>
@@ -138,4 +134,4 @@ class UploadButton extends React.Component<
   }
 }
 
-export default UploadButton;
+export default SortButton;
