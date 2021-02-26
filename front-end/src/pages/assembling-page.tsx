@@ -110,6 +110,19 @@ class AssemblingPage extends React.Component<{}, AssemblingPageState> {
     this.showImages();
   }
 
+
+  renderSamplePhoto(event: any){
+    if(event?.target.files.length> 0){
+      return   <img
+      className="inspo_photo"
+      src={event.target.files.length[0]}
+      title = "inps0_image"
+      >
+      </img>
+  }
+}
+
+
   render() {
     return (
       <div>
@@ -126,6 +139,21 @@ class AssemblingPage extends React.Component<{}, AssemblingPageState> {
             Reset Images
           </Button>
         </div>
+        <input
+        accept="image/*"
+        className={"input"}
+        id="samplePhoto"
+        multiple
+        type="file"
+        />
+        <label htmlFor = "samplePhoto">
+          <Button variant="contained"
+          color="primary"
+          component = "span">
+          Upload sample Photo
+          </Button>
+        </label>
+
         <div className='assembling-page'>
           <div className='imageContainerToAssemble'>
             {this.state.loading ? (
