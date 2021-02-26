@@ -5,6 +5,14 @@
 root {
     margin: 8px;
 }
+.button-container {
+  display: flex;
+  margin: 10px;
+}
+
+.button-container > * {
+  padding-right: 5px;
+}
 
 .uploadedImage {
     max-width: 300px;

@@ -134,6 +134,7 @@ class AssemblingPage extends React.Component<{}, AssemblingPageState> {
               this.showImages()
             )}
           </div>
+          <div className='inspirationPhotoContainer'>I am the image</div>
           <div className='assemble' id='assemble'>
             <div id='message_to_assemble'>Assemble images here!</div>
           </div>

@@ -133,6 +133,7 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
           type='file'
           onChange={this.handleUpload}
         />
+        <div className='button-container'></div>
         <label id='upload' htmlFor='contained-button-file'>
           <UploadButton saveImageFunction={this.saveImage} />
         </label>
@@ -147,8 +148,8 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
         >
           Reset Images
         </Button>
+
         {this.state.loading ? <CircularProgress /> : this.showImages()}
-        {/*  <input accept="image/*" className={"input"} id="icon-button-file" type="file" /> */}
       </div>
     );
   }

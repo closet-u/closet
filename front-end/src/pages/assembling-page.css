@@ -16,14 +16,23 @@
   background-color: rgba(211, 211, 211, .8);;
   border-left: 10px;
   border-top: 150px;
-  width: 35%;
   margin: 25px;
+  max-width: 35%;
   position: relative;
+  flex-grow: 4;
 }
 
 .images {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+}
+
+.inspirationPhotoContainer {
+  background-color: rgba(211, 211, 211, .8);
+  position: relative;
+  flex-grow: 2;
+  margin-top: 25px;
+  max-height: 400px;
 }
 
 #reset_button2{
@@ -53,10 +62,11 @@
   /* flex-wrap: wrap; */
   border-left: 100px;
   background-color:rgba(211, 211, 211, .8);;
-  width: 40%;
   align-self: right !important;
   margin: 25px;
+  max-width: 35%;
   min-height: 700px;
+  flex-grow: 4;
 }
 
 #message_to_assemble{
