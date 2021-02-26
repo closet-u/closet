@@ -11,7 +11,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Colors } from "../../models/ClothingColors";
 import { Types } from "../../models/ClothingTypes";
-//import "./SortButton.css";
+import "./SortButton.css";
 
 interface SortButtonProps {
   sortImageFunction: (type: string, color: string) => void;
@@ -28,8 +28,8 @@ class SortButton extends React.Component<SortButtonProps, SortButtonState> {
     super(props);
     this.state = {
       showModal: false,
-      type: Types.OTHER,
-      color: Colors.OTHER,
+      type: "Any",
+      color: "Any",
     };
 
     this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -64,6 +64,7 @@ class SortButton extends React.Component<SortButtonProps, SortButtonState> {
     Object.values(Colors).forEach((color: Colors) =>
       items.push(<MenuItem value={color}>{color}</MenuItem>)
     );
+    items.push(<MenuItem value={"Any"}>{"Any"}</MenuItem>);
     return items;
   }
 
@@ -72,6 +73,7 @@ class SortButton extends React.Component<SortButtonProps, SortButtonState> {
     Object.values(Types).forEach((type: Types) =>
       items.push(<MenuItem value={type}>{type}</MenuItem>)
     );
+    items.push(<MenuItem value={"Any"}>{"Any"}</MenuItem>);
     return items;
   }
 
@@ -100,7 +102,7 @@ class SortButton extends React.Component<SortButtonProps, SortButtonState> {
         >
           <DialogTitle>Edit image tags</DialogTitle>
           <DialogContent>
-            <FormControl className='Sort-form-color'>
+            <FormControl className='sort-form-color'>
               <InputLabel className='select-label'>Color</InputLabel>
               <Select
                 className='selector'
@@ -110,7 +112,7 @@ class SortButton extends React.Component<SortButtonProps, SortButtonState> {
                 {this.getColorItems()}
               </Select>
             </FormControl>
-            <FormControl className='Sort-form-type'>
+            <FormControl className='sort-form-type'>
               <InputLabel className='select-label'>Type</InputLabel>
               <Select
                 className='selector'

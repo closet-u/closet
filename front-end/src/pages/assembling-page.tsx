@@ -58,22 +58,22 @@ class AssemblingPage extends React.Component<{}, AssemblingPageState> {
     if (this.state.imagesBeingShown.length === 0)
       return <span>Upload some images to see them here!</span>;
     let images = this.state.imagesBeingShown.map((file: ImageMetadata) => (
-      <Draggable>
+      <Draggable key={file.filename}>
         <img
-          className={"uploadedImage_toAssemble"}
+          className={"draggableImage"}
           src={`https://test-account-images.s3.us-east-2.amazonaws.com/${file.filename}`}
           alt={file.filename}
           title={file.color + "-" + file.type}
+          id={file.filename}
         />
       </Draggable>
     ));
-    return <div className={"imageContainer_assemble"}>{images}</div>;
+    return <div className='images'>{images}</div>;
   }
 
   resetImages() {
-    let original_images = this.state.images;
     this.setState({
-      imagesBeingShown: original_images,
+      imagesBeingShown: this.state.images,
     });
     this.showImages();
   }
@@ -83,10 +83,27 @@ class AssemblingPage extends React.Component<{}, AssemblingPageState> {
     if (this.state.imagesBeingShown.length === 0)
       return window.alert("No images to select from");
     //this.setState({ ...initialState });
-    this.state.imagesBeingShown.forEach((image) => {
-      if (image.color === color && image.type === type) {
+    let assembleRect = document
+      .getElementById("assemble")
+      ?.getBoundingClientRect();
+    console.log(assembleRect);
+    this.state.images.forEach((image) => {
+      if (color === "Any" && image.type === type) {
         images.push(image);
-        console.log(images);
+      } else if (type === "Any" && image.color === color) {
+        images.push(image);
+      } else if (image.color === color && image.type === type) {
+        images.push(image);
+      } else {
+        let imageElementRect = document
+          .getElementById(image.filename)
+          ?.getBoundingClientRect();
+        if (
+          assembleRect &&
+          imageElementRect &&
+          assembleRect.left < imageElementRect.left
+        )
+          images.push(image);
       }
     });
     this.setState({ imagesBeingShown: images });
@@ -94,23 +111,32 @@ class AssemblingPage extends React.Component<{}, AssemblingPageState> {
   }
 
   render() {
-    let images = this.state.images;
     return (
-      <div className='assembling-page'>
-        {this.state.loading ? <CircularProgress /> : this.showImages()}
-        <label id='filter_button'>
-          <SortButton sortImageFunction={this.filterImages} />
-        </label>
-        <Button
-          id='reset_button2'
-          size='small'
-          onClick={this.resetImages}
-          variant='contained'
-        >
-          Reset Images
-        </Button>
-        <div className={"assemble"}>
-          <div id='message_to_assemble'>Assemble images here!</div>
+      <div>
+        <div className='button-container'>
+          <label id='filter_button'>
+            <SortButton sortImageFunction={this.filterImages} />
+          </label>
+          <Button
+            id='reset_button2'
+            size='small'
+            onClick={this.resetImages}
+            variant='contained'
+          >
+            Reset Images
+          </Button>
+        </div>
+        <div className='assembling-page'>
+          <div className='imageContainerToAssemble'>
+            {this.state.loading ? (
+              <CircularProgress className='spinner' />
+            ) : (
+              this.showImages()
+            )}
+          </div>
+          <div className='assemble' id='assemble'>
+            <div id='message_to_assemble'>Assemble images here!</div>
+          </div>
         </div>
       </div>
     );
