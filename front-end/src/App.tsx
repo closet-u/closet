@@ -38,27 +38,29 @@ function App() {
   return (
     <Router>
       {/* REFACTOR: MOVE TO MAIN PAGE*/}
-      <h1 id='title'>Closet-U</h1>
-      <Box borderBottom={2} {...defaultProps} />
-      <div className='menu'>
-        <Button
-          aria-controls='simple-menu'
-          aria-haspopup='true'
-          onClick={handleClick}
-        >
-          Open Menu
-        </Button>
-        <Menu
-          id='simple-menu'
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={redirectCloset}>My Closet</MenuItem>
-          <MenuItem onClick={redirect}>Assemble</MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
-        </Menu>
+      <div id='wrapper'>
+        <h1 id='title'>Closet-U</h1>
+        <Box borderBottom={2} {...defaultProps} />
+        <div className='menu'>
+          <Button
+            aria-controls='simple-menu'
+            aria-haspopup='true'
+            onClick={handleClick}
+          >
+            Open Menu
+          </Button>
+          <Menu
+            id='simple-menu'
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={redirectCloset}>My Closet</MenuItem>
+            <MenuItem onClick={redirect}>Assemble</MenuItem>
+            <MenuItem onClick={handleClose}>Logout</MenuItem>
+          </Menu>
+        </div>
       </div>
 
       <Box borderBottom={2} {...defaultProps} />

@@ -1,17 +1,24 @@
 import React from "react";
 import ClosetApiService from "../services/ClosetApiService";
 import UploadButton from "../components/UploadButton/UploadButton";
+import SortButton from "../components/UploadButton/SortButton";
 import "./closet-page.css";
 import { Types } from "../models/ClothingTypes";
 import { Colors } from "../models/ClothingColors";
 import { CircularProgress } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import { ImageMetadata } from "../models/ImageMetadata";
 
 interface ClosetPageState {
-  images: any[];
+  images: ImageMetadata[];
+  imagesBeingShown: ImageMetadata[];
   currentImage: any;
   loading: boolean;
 }
+
+const initialState = {
+  images: [],
+};
 
 class ClosetPage extends React.Component<{}, ClosetPageState> {
   closetApiService = new ClosetApiService();
@@ -20,17 +27,19 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
     super(props);
     this.state = {
       images: [],
+      imagesBeingShown: [],
       currentImage: {} as File,
       loading: true,
     };
     this.setImages();
+    this.showImages();
     this.handleUpload = this.handleUpload.bind(this);
     this.saveImage = this.saveImage.bind(this);
+    this.filterImages = this.filterImages.bind(this);
+    this.resetImages = this.resetImages.bind(this);
   }
 
   saveImage(type: Types, color: Colors) {
-    console.log("Calling backend");
-    console.log(this.state.currentImage);
     this.closetApiService.sendImages(this.state.currentImage, type, color);
     //PLS DONT DO THIS FIX THIS THIS IS BAD
     //Make a loading sign and completion sign
@@ -50,18 +59,17 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
     this.closetApiService
       .getUserImages("User 1")
       .then((data: ImageMetadata[]) => {
-        console.log({ data });
         if (data) {
-          let images: string[] = [];
+          let images: ImageMetadata[] = [];
           data.forEach((imageObject) => {
-            console.log({ imageObject });
             images.push(
-              `https://test-account-images.s3.us-east-2.amazonaws.com/${imageObject.filename}`
+              //`https://test-account-images.s3.us-east-2.amazonaws.com/${imageObject.filename}`
+              imageObject
             );
           });
-          console.log({ images });
           this.setState({
             images: images,
+            imagesBeingShown: images,
             loading: false,
           });
         }
@@ -69,11 +77,15 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
   }
 
   showImages() {
-    console.log(this.state.images);
-    if (this.state.images.length === 0)
+    if (this.state.imagesBeingShown.length === 0)
       return <span>Upload some images to see them here!</span>;
-    let images = this.state.images.map((file: any) => (
-      <img className={"uploadedImage"} src={file} alt={file} />
+    let images = this.state.imagesBeingShown.map((file: ImageMetadata) => (
+      <img
+        className={"uploadedImage"}
+        src={`https://test-account-images.s3.us-east-2.amazonaws.com/${file.filename}`}
+        alt={file.filename}
+        title={file.color + "-" + file.type}
+      />
     ));
     return <div className={"uploadedImageContainer"}>{images}</div>;
   }
@@ -86,26 +98,28 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
     }
   }
 
-  /* sortImages(event: any) {
-    this.closetApiService
-      .getImagesWithSelectedTags(type, color)
-      .then((data: any) => {
-        console.log({ data });
-        if (data) {
-          let images = [];
-          for (let image in data) {
-            images.push(
-              `https://test-account-images.s3.us-east-2.amazonaws.com/${image}`
-            );
-          }
-          console.log({ images });
-          this.setState({
-            images: images,
-            loading: false,
-          });
-        }
-      });
-  } */
+  resetImages() {
+    let original_images = this.state.images;
+    this.setState({
+      imagesBeingShown: original_images,
+    });
+    this.showImages();
+  }
+
+  filterImages(type: string, color: string) {
+    let images: ImageMetadata[] = [];
+    if (this.state.imagesBeingShown.length === 0)
+      return window.alert("No images to select from");
+    //this.setState({ ...initialState });
+    this.state.imagesBeingShown.forEach((image) => {
+      if (image.color === color && image.type === type) {
+        images.push(image);
+        console.log(images);
+      }
+    });
+    this.setState({ imagesBeingShown: images });
+    this.showImages();
+  }
 
   render() {
     let images = this.state.images;
@@ -119,9 +133,20 @@ class ClosetPage extends React.Component<{}, ClosetPageState> {
           type='file'
           onChange={this.handleUpload}
         />
-        <label htmlFor='contained-button-file'>
+        <label id='upload' htmlFor='contained-button-file'>
           <UploadButton saveImageFunction={this.saveImage} />
         </label>
+        <label id='filter_button'>
+          <SortButton sortImageFunction={this.filterImages} />
+        </label>
+        <Button
+          id='reset_button'
+          size='small'
+          onClick={this.resetImages}
+          variant='contained'
+        >
+          Reset Images
+        </Button>
         {this.state.loading ? <CircularProgress /> : this.showImages()}
         {/*  <input accept="image/*" className={"input"} id="icon-button-file" type="file" /> */}
       </div>

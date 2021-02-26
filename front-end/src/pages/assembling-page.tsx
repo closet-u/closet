@@ -3,13 +3,15 @@ import Grid, { GridSpacing } from "@material-ui/core/Grid";
 import Draggable from "react-draggable";
 import ClosetApiService from "../services/ClosetApiService";
 import { CircularProgress } from "@material-ui/core";
-import GridList from "@material-ui/core/GridList";
-import GridListTile from "@material-ui/core/GridListTile";
-
+import Button from "@material-ui/core/Button";
+import SortButton from "../components/UploadButton/SortButton";
+import { ImageMetadata } from "../models/ImageMetadata";
 import "./assembling-page.css";
 
 interface AssemblingPageState {
-  images: any[];
+  images: ImageMetadata[];
+  imagesBeingShown: ImageMetadata[];
+  currentImage: any;
   loading: boolean;
 }
 
@@ -20,40 +22,75 @@ class AssemblingPage extends React.Component<{}, AssemblingPageState> {
     super(props);
     this.state = {
       images: [],
+      imagesBeingShown: [],
+      currentImage: {} as File,
       loading: true,
     };
     this.setImages();
+    this.showImages();
+
+    this.filterImages = this.filterImages.bind(this);
+    this.resetImages = this.resetImages.bind(this);
   }
 
   setImages() {
-    this.closetApiService.getUserImages("User 1").then((data: any) => {
-      console.log({ data });
-      if (data) {
-        let images = [];
-        for (let image in data) {
-          images.push(
-            `https://test-account-images.s3.us-east-2.amazonaws.com/${image}`
-          );
+    this.closetApiService
+      .getUserImages("User 1")
+      .then((data: ImageMetadata[]) => {
+        if (data) {
+          let images: ImageMetadata[] = [];
+          data.forEach((imageObject) => {
+            images.push(
+              //`https://test-account-images.s3.us-east-2.amazonaws.com/${imageObject.filename}`
+              imageObject
+            );
+          });
+          this.setState({
+            images: images,
+            imagesBeingShown: images,
+            loading: false,
+          });
         }
-        console.log({ images });
-        this.setState({
-          images: images,
-          loading: false,
-        });
-      }
-    });
+      });
   }
 
   showImages() {
-    console.log(this.state.images);
-    if (this.state.images.length === 0)
+    if (this.state.imagesBeingShown.length === 0)
       return <span>Upload some images to see them here!</span>;
-    let images = this.state.images.map((file: any) => (
+    let images = this.state.imagesBeingShown.map((file: ImageMetadata) => (
       <Draggable>
-        <img className={"uploadedImage_toAssemble"} src={file} alt={file} />
+        <img
+          className={"uploadedImage_toAssemble"}
+          src={`https://test-account-images.s3.us-east-2.amazonaws.com/${file.filename}`}
+          alt={file.filename}
+          title={file.color + "-" + file.type}
+        />
       </Draggable>
     ));
-    return <div className={"imageContainer"}>{images}</div>;
+    return <div className={"imageContainer_assemble"}>{images}</div>;
+  }
+
+  resetImages() {
+    let original_images = this.state.images;
+    this.setState({
+      imagesBeingShown: original_images,
+    });
+    this.showImages();
+  }
+
+  filterImages(type: string, color: string) {
+    let images: ImageMetadata[] = [];
+    if (this.state.imagesBeingShown.length === 0)
+      return window.alert("No images to select from");
+    //this.setState({ ...initialState });
+    this.state.imagesBeingShown.forEach((image) => {
+      if (image.color === color && image.type === type) {
+        images.push(image);
+        console.log(images);
+      }
+    });
+    this.setState({ imagesBeingShown: images });
+    this.showImages();
   }
 
   render() {
@@ -61,7 +98,17 @@ class AssemblingPage extends React.Component<{}, AssemblingPageState> {
     return (
       <div className='assembling-page'>
         {this.state.loading ? <CircularProgress /> : this.showImages()}
-
+        <label id='filter_button'>
+          <SortButton sortImageFunction={this.filterImages} />
+        </label>
+        <Button
+          id='reset_button2'
+          size='small'
+          onClick={this.resetImages}
+          variant='contained'
+        >
+          Reset Images
+        </Button>
         <div className={"assemble"}>
           <div id='message_to_assemble'>Assemble images here!</div>
         </div>

@@ -103,8 +103,8 @@ def put_object(object_key, type, color, image):
 
 def get_object(bucket, object_key):
 
-    s3 = boto3.resource('s3', aws_access_key_id='',
-                        aws_secret_access_key='')
+    s3 = boto3.resource('s3', aws_access_key_id='AKIAIDRNOP55THYU4OXQ',
+                        aws_secret_access_key='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')
     my_bucket = s3.Bucket(bucket)
 
     try:
@@ -139,10 +139,7 @@ def bucket_exists(bucket_name):
 
 
 def upload_file(file, bucket, c_color, c_type, file_t, object_name=None):
-    color = ''
-    meta_data = {
-        color: c_color
-    }
+
     key_tag = get_random_string(8)
     key_with_exten = key_tag + ".jpg"
     official_key = key_with_exten.strip()
@@ -151,42 +148,103 @@ def upload_file(file, bucket, c_color, c_type, file_t, object_name=None):
         object_name = file
 
     # Upload the file
-    s3_client = client('s3', aws_access_key_id='',
-                       aws_secret_access_key='')
+    s3_client = client('s3', aws_access_key_id='AKIAIDRNOP55THYU4OXQ',
+                       aws_secret_access_key='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')
     try:
         response = s3_client.put_object(ACL='public-read',
                                         Body=file,
                                         Bucket=bucket, Key=official_key,
                                         ContentType=file_t,
-                                        Metadata=meta_data)
+                                        )
+        response = s3_client.put_object_tagging(
+            Bucket=bucket,
+            Key=official_key,
+            Tagging={
+                'TagSet': [
+                    {
+                        'Key': 'Type',
+                        'Value': c_type
+                    },
+                    {
+                        'Key': 'Color',
+                        'Value': c_color
+                    }
+                ]
+            },
+        )
+
     except ClientError as e:
         # logging.error(e)
         return False
     return True
 
 
+def getTags(object_key):
+    tags = []
+    s3_client = client('s3', aws_access_key_id='AKIAIDRNOP55THYU4OXQ',
+                       aws_secret_access_key='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')
+    try:
+        response = s3_client.get_object_tagging(
+            Bucket='test-account-images',
+            Key=object_key,
+        )
+        tagSet = response.get('TagSet')
+        image_type = ''
+        image_color = ''
+        for vals in tagSet:
+            if vals['Key'] == 'Type':
+                image_type = vals['Value']
+            elif vals['Key'] == 'Color':
+                image_color = vals['Value']
+            else:
+                print('got ' + vals['Key'])
+                return 1 / 0
+        tags.append(image_type)
+        tags.append(image_color)
+        return tags
+
+    except ClientError as e:
+        return e
+
+
 def listFiles():
-    images = {}
+    images = []
+    tagset = {}
     # boto3
-    s3_client = client('s3', aws_access_key_id='',
-                       aws_secret_access_key='')
+    s3_client = client('s3', aws_access_key_id='AKIAIDRNOP55THYU4OXQ',
+                       aws_secret_access_key='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')
     # for key in s3_client.list_objects(Bucket='test-account-images')['Contents']:
-    print (s3_client.list_objects(Bucket='test-account-images'))
+
     for key in s3_client.list_objects(Bucket='test-account-images')['Contents']:
         image = get_object('test-account-images', key['Key'])
+        obj_tags = []
         encoded_image = base64.b64encode(image)
         decoded_image = encoded_image.decode('utf-8')
         # print(image)
         obj_key = key['Key']
+        obj_col = 'color'
+        obj_type = 'type'
+        obj_tags = getTags(obj_key)
+        image_type = obj_tags[0]
+        image_color = obj_tags[1]
         # print(obj_key)
-        images.update({obj_key: decoded_image})
+
+        images.append({
+            obj_key: decoded_image,
+            obj_col: image_color,
+            obj_type: image_type,
+            'filename': obj_key
+        })
+
     return images
 
 
-def success():
+""" def success():
     if method == "POST":
-        print(request.json.keys())
+        # print(request.json.keys())
     return 200
+
+ """
 
 
 def get_random_string(length):

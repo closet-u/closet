@@ -62,9 +62,6 @@ def upload():
     color = request.headers.get('color')
     clothing_type = request.headers.get('type')
 
-    print("COLOR :: ", color)
-    print("CLOTHING_TYPE :: ", clothing_type)
-
     bucket_name = request.headers.get("bucket_name")
     object_key = request.headers.get("obj_key")
 
@@ -82,7 +79,9 @@ def upload():
 def retrieve():
     jsonified_images = {}
     images = listFiles()
+    # print(images['COLOR'])
     jsonified_images = json.dumps(images)
+
     return jsonified_images
 
 

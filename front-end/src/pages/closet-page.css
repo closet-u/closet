@@ -6,25 +6,44 @@ root {
     margin: 8px;
 }
 
+.uploadedImage {
+    max-width: 300px;
+    max-height: 425px;
+    margin: 10px;
+    opacity: 1 !important;
+    border: 1px solid black;
+    border-radius: 0px;
+    justify-self: center;
+}
+
+
+
 .uploadedImageContainer {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    border-radius: 15px;
-    background-color: rgba(161, 106, 23, 0.671);
+    border-radius: 0px;
+    background-color: rgba(211, 211, 211, .8);
     max-width: 100%;
     margin: 50px;
     min-height: 300px;
 }
 
-.uploadedImage {
-    max-width: 300px;
-    max-height: 425px;
-    margin: 10px;
-    border: 2px solid black;
-    border-radius: 5px;
-    justify-self: center;
+
+
+#upload{
+    border: 2px;
+    justify-content: center !important;
 }
 
+#filter_button{
+    border: 2px;
+    justify-content: center !important;
+}
+
+#reset_button{
+    border: 2px;
+    justify-content: center !important;
+}
 
 
 #modal{

@@ -1,6 +1,6 @@
 //import React from "react";
 import React, { createRef, Component } from "react";
-import Modal from "react-modal";
+
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
@@ -90,6 +90,7 @@ class UploadButton extends React.Component<
         <Button
           className={"uploadButton"}
           variant='contained'
+          size='small'
           color='default'
           component='span'
           onClick={this.handleOpenModal}

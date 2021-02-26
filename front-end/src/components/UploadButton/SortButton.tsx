@@ -1,5 +1,5 @@
 import React, { createRef, Component } from "react";
-import Modal from "react-modal";
+
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
@@ -11,10 +11,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Colors } from "../../models/ClothingColors";
 import { Types } from "../../models/ClothingTypes";
-import "./SortButton.css";
+//import "./SortButton.css";
 
 interface SortButtonProps {
-  saveImageFunction: any;
+  sortImageFunction: (type: string, color: string) => void;
 }
 
 interface SortButtonState {
@@ -76,7 +76,7 @@ class SortButton extends React.Component<SortButtonProps, SortButtonState> {
   }
 
   handleSortImage() {
-    this.props.saveImageFunction(this.state.type, this.state.color);
+    this.props.sortImageFunction(this.state.type, this.state.color);
     this.handleCloseModal();
   }
 
@@ -86,6 +86,7 @@ class SortButton extends React.Component<SortButtonProps, SortButtonState> {
         <Button
           className={"SortButton"}
           variant='contained'
+          size='small'
           color='default'
           component='span'
           onClick={this.handleOpenModal}
